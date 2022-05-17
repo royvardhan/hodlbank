@@ -18,7 +18,7 @@ contract HodlBank {
     mapping (address => Hodler) public addressToHodler;
 
     function lockFunds(uint _amount, uint _unlockDate) public payable {
-        require(_amount > 0 && msg.value >= _amount , "Amount must be greater than 0");
+        require(_amount >= 0.01 ether && msg.value >= _amount , "Amount must be greater than 0.01 ether");
         require(_unlockDate > block.timestamp, "Unlock date must be in the future");
         hodlers.push(Hodler(msg.sender, _amount, _unlockDate));
         addressToHodler[msg.sender] = hodlers[hodlers.length - 1];
@@ -28,7 +28,7 @@ contract HodlBank {
     function withdrawFunds(uint _amount) public {
         require(msg.sender == addressToHodler[msg.sender].owner, "Only the owner can withdraw funds");
         require(addressToHodler[msg.sender].amount >= _amount, "Not enough funds");
-        require(addressToHodler[msg.sender].unlockDate > block.timestamp, "Funds are locked");
+        require(addressToHodler[msg.sender].unlockDate >= block.timestamp, "Funds are locked");
         addressToHodler[msg.sender].amount -= _amount;
         payable(msg.sender).transfer(_amount);
         
