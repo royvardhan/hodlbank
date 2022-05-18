@@ -5,7 +5,7 @@ import Locker from './Locker';
 
 export default function App() {
   return (
-    <div className="">
+    <div>
       <Navbar />
       <Locker />
     </div>
