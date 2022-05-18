@@ -28,7 +28,7 @@ contract HodlBank {
     function withdrawFunds(uint _amount) public {
         require(msg.sender == addressToHodler[msg.sender].owner, "Only the owner can withdraw funds");
         require(addressToHodler[msg.sender].amount >= _amount, "Not enough funds");
-        require(addressToHodler[msg.sender].unlockDate >= block.timestamp, "Funds are locked");
+        require(block.timestamp > addressToHodler[msg.sender].unlockDate, "Funds are locked");
         addressToHodler[msg.sender].amount -= _amount;
         payable(msg.sender).transfer(_amount);
         
@@ -36,6 +36,10 @@ contract HodlBank {
 
     function getHodlers() public view returns (uint) {
         return hodlers.length;
+    }
+
+    function getBlockTimestamp() public view returns (uint) {
+        return block.timestamp;
     }
 
     function getHodlerData(address _address) public view returns (uint, uint) {
