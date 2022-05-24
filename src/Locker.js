@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import hodlBankAbi from './hodlBankAbi.json';
-import {ethers} from 'ethers';
+import {BigNumber, ethers} from 'ethers';
+import { formatEther, parseEther } from 'ethers/lib/utils'; 
 
 function Locker() {
     
@@ -56,9 +57,6 @@ function Locker() {
     
 
     const handleSubmit = async () => {
-        let ts = await contract.getBlockTimestamp();
-        console.log(ts);
-
     }
 
 
