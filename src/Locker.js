@@ -25,8 +25,8 @@ function Locker() {
             if (window.ethereum && window.ethereum.isMetaMask) {
 
                 window.ethereum.request({ method: 'eth_requestAccounts'})
-                .then(result => {
-                    contractInit(result[0])
+                .then(accounts => {
+                    contractInit(accounts[0])
                     const accountStr = account.substring(0,7) + "..."
                     setAccount(accountStr);
                     setWallAddrStr(accountStr);
