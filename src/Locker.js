@@ -8,30 +8,57 @@ function Locker() {
     const handleChange = (event) => {setValue(prev => event.target.value)}
     const [time, setTime] = useState('');
     const handleTime = (event) => {setTime(prev => event.target.value)}
-
+    const [account, setAccount] = useState('Connect Wallet');
+    const [wallAddrStr, setWallAddrStr] = useState('0x0000');
+    const [errorMessage, setErrorMessage] = useState(null);
+    
 
     // Connect Wallet Functionality
-        // Web3 Browswer Detection
-                async function connectToMetamask() {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const accounts = await provider.send("eth_requestAccounts", []);
-                const account = accounts[0]
-                const accountStr = account.substring(0,7) + "..."
-                setAccount(accountStr);
-                setWallAddrStr(accountStr)
+    // Web3 Browswer Detection & Read-Write Functionality
 
+        let contractAddress = "0x416d9DEA938Fc866Ecf87F46EC880157188D7031";
+        const [provider, setProvider] = useState(null);
+        const [signer, setSigner] = useState(null);
+        const [contract, setContract] = useState(null);
 
-     }
-        const [account, setAccount] = useState('Connect Wallet');
-        const [wallAddrStr, setWallAddrStr] = useState('0x0000'); 
-        
-        
-        
+        const connectWallet = () => {
+            if (window.ethereum && window.ethereum.isMetaMask) {
 
-    // 
+                window.ethereum.request({ method: 'eth_requestAccounts'})
+                .then(result => {
+                    contractInit(result[0])
+                    const accountStr = account.substring(0,7) + "..."
+                    setAccount(accountStr);
+                    setWallAddrStr(accountStr);
 
-    function handleSubmit() {
-        console.log("Hello")
+                })
+                .catch(error => {
+                    setErrorMessage(error.message);
+                
+                });
+    
+            } else {
+                console.log('Need to install MetaMask');
+                setErrorMessage('Please install MetaMask browser extension to interact');
+            }
+        }
+
+        const contractInit = (newAccount) => {
+            let tempProvider = new ethers.providers.Web3Provider(window.ethereum);
+		    setProvider(tempProvider);
+
+		    let tempSigner = tempProvider.getSigner();
+		    setSigner(tempSigner);
+
+		    let tempContract = new ethers.Contract(contractAddress, hodlBankAbi, tempSigner);
+		    setContract(tempContract);
+        }
+    
+
+    const handleSubmit = async () => {
+        let ts = await contract.getBlockTimestamp();
+        console.log(ts);
+
     }
 
 
@@ -52,7 +79,7 @@ function Locker() {
         <button onClick={handleSubmit} className="pl-0.5 pr-0.5 text-xs rounded bg-gradient-to-r from-blue-400 to-emerald-400 px-4 py-1"> LFG!!! </button>
         </div>
         <div className="flex justify-center pt-2">
-        <button onClick={connectToMetamask} className="pl-0.5 pr-0.5 text-xs rounded bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-1"> {account} </button>
+        <button onClick={connectWallet} className="pl-0.5 pr-0.5 text-xs rounded bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-1"> {account} </button>
         </div>
         </div>
         </div>
