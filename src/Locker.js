@@ -17,7 +17,7 @@ function Locker() {
     // Connect Wallet Functionality
     // Web3 Browswer Detection & Read-Write Functionality
 
-        let contractAddress = "0x416d9DEA938Fc866Ecf87F46EC880157188D7031";
+        let contractAddress = "0x1D68ad6faCCB5993414ff8966565969825710A16";
         const [provider, setProvider] = useState(null);
         const [signer, setSigner] = useState(null);
         const [contract, setContract] = useState(null);
@@ -28,9 +28,10 @@ function Locker() {
                 window.ethereum.request({ method: 'eth_requestAccounts'})
                 .then(accounts => {
                     contractInit(accounts[0])
-                    const accountStr = account.substring(0,7) + "..."
+                    const accountStr = accounts[0].substring(0,7) + "..."
                     setAccount(accountStr);
                     setWallAddrStr(accountStr);
+                    console.log(accounts[0])
 
                 })
                 .catch(error => {
@@ -57,6 +58,10 @@ function Locker() {
     
 
     const handleSubmit = async () => {
+        let tempValue = parseEther("0.02");
+        const tx = await contract.lockFunds(Number(tempValue), 16530)
+        await tx.wait()
+        console.log(tx.hash);
     }
 
 
