@@ -60,7 +60,7 @@ export default function InfoChecker (props) {
         <button className='pl-0.5 pr-0.5 text-xs rounded bg-gradient-to-r from-blue-400 to-emerald-400 px-4 py-1' onClick={handleClick} type="date"> Check </button>
         </div>
         <div className="pt-3 text-center">
-            <p>Your have locked: {lockedEther}</p>
+            <p>You have locked: {lockedEther}</p>
             <p>Until: {time} </p>
         </div>
         </div>
