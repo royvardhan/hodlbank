@@ -19,7 +19,7 @@ function Locker() {
     // Connect Wallet Functionality
     // Web3 Browswer Detection & Read-Write Functionality
 
-        let contractAddress = "0x1D68ad6faCCB5993414ff8966565969825710A16";
+        let contractAddress = "0x094367f34f29FE55b8E3A269feb3F04DdbE199ff";
         const [provider, setProvider] = useState(null);
         const [signer, setSigner] = useState(null);
         const [contract, setContract] = useState(null);
