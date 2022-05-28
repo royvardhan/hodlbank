@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import hodlBankAbi from './hodlBankAbi.json';
-import {BigNumber, ethers} from 'ethers';
-import { formatEther, parseEther } from 'ethers/lib/utils'; 
+import {BigNumber, Contract, ethers} from 'ethers';
+import { formatEther, parseEther } from 'ethers/lib/utils';
+import InfoChecker from './InfoChecker';
+import "./index.css" 
 
 function Locker() {
     
@@ -58,16 +60,25 @@ function Locker() {
     
 
     const handleSubmit = async () => {
-        let tempValue = parseEther("0.02");
-        const tx = await contract.lockFunds(Number(tempValue), 16530)
+        const unixTimestamp = Math.floor(new Date(time).getTime() / 1000)
+        const tempValue = parseEther(value);
+        const tx = await contract.lockFunds(tempValue, unixTimestamp, {value: tempValue});
+        await tx.wait()
+        console.log(tx.hash);
+    }
+
+    const handleWithdraw = async () => {
+        let tempValue = parseEther(value);
+        const tx = await contract.withdrawFunds(tempValue);
         await tx.wait()
         console.log(tx.hash);
     }
 
 
     return (
+        <div>
         <div className="flex justify-center text-sm">
-        <div className='pt-5 pb-5 backdrop-blur-sm rounded-lg border-solid border-2 border-zinc-400 max-w-xl bg-gradient-to-r from-gray-100 to-gray-300 drop-shadow-2xl  '>
+        <div className='pt-5 pb-5 backdrop-blur-sm rounded-lg border-solid border-2 min-w-max border-zinc-400 bg-gradient-to-r from-gray-100 to-gray-300 drop-shadow-2xl  '>
         <h4 className="text-center">Hello Hodler! You are {wallAddrStr}</h4>
         <div className="flex justify-center p-5">
             <p>You Lock:</p>
@@ -77,6 +88,7 @@ function Locker() {
         <div className="flex justify-center">
         <p>Until: </p>
         <input className='ml-4 mr-4 border-solid border-2 border-indigo-600 text-center' onChange={handleTime} type="date" />
+        <p>GMT</p>
         </div>
         <div className="flex justify-center pt-5">
         <button onClick={handleSubmit} className="pl-0.5 pr-0.5 text-xs rounded bg-gradient-to-r from-blue-400 to-emerald-400 px-4 py-1"> LFG!!! </button>
@@ -84,8 +96,12 @@ function Locker() {
         <div className="flex justify-center pt-2">
         <button onClick={connectWallet} className="pl-0.5 pr-0.5 text-xs rounded bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-1"> {account} </button>
         </div>
+        {!contract && <p className='pt-3 text-center'>Connect Wallet to Check Lock Info 👇 </p>}
         </div>
         </div>
+        {contract && <InfoChecker state={contract} />}
+        </div>
+        
     )
 
 }
