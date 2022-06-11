@@ -5,8 +5,9 @@ import { formatEther, parseEther } from 'ethers/lib/utils';
 import InfoChecker from './InfoChecker';
 import "./index.css" 
 
-function Locker() {
-    
+
+export default function Withdraw() {
+
     const [value, setValue] = useState('');
     const handleChange = (event) => {setValue(prev => event.target.value)}
     const [time, setTime] = useState('');
@@ -57,53 +58,32 @@ function Locker() {
 		    let tempContract = new ethers.Contract(contractAddress, hodlBankAbi, tempSigner);
 		    setContract(tempContract);
         }
-    
 
-    const handleSubmit = async () => {
-        const unixTimestamp = Math.floor(new Date(time).getTime() / 1000)
-        const tempValue = parseEther(value);
-        const tx = await contract.lockFunds(tempValue, unixTimestamp, {value: tempValue});
-        await tx.wait()
-        console.log(tx.hash);
-    }
-
-    const handleWithdraw = async () => {
-        let tempValue = parseEther(value);
-        const tx = await contract.withdrawFunds(tempValue);
-        await tx.wait()
-        console.log(tx.hash);
-    }
+        const handleWithdraw = async () => {
+            let tempValue = parseEther(value);
+            const tx = await contract.withdrawFunds(tempValue);
+            await tx.wait()
+            console.log(tx.hash);
+        }
 
 
     return (
-        <div>
         <div className="flex justify-center text-sm">
-        <div className='pt-5 pb-5 backdrop-blur-sm rounded-lg border-solid border-2 min-w-fit border-zinc-400 bg-gradient-to-r from-gray-100 to-gray-300 drop-shadow-2xl  '>
-        <h4 className="text-center">Hello Hodler! You are {wallAddrStr}</h4>
+        <div className='pt-5 pb-5 backdrop-blur-sm rounded-lg border-solid border-2 min-w-0 border-zinc-400 bg-gradient-to-r from-gray-100 to-gray-300 drop-shadow-2xl  '>
+        <h4 className="text-center">Check Eligibility and Withdraw</h4>
         <div className="flex justify-center p-5">
-            <p>You Lock:</p>
+            <p>Unlock:</p>
            <input className='ml-4 mr-4 border-solid border-2 border-indigo-600 text-center' onChange={handleChange} type="number" placeholder="Ex. 0.01 or 100 ETH" />
            <p>ETH</p>
         </div>
-        <div className="flex justify-center">
-        <p>Until: </p>
-        <input className='ml-4 mr-4 border-solid border-2 border-indigo-600 text-center' onChange={handleTime} type="date" />
-        <p>GMT</p>
-        </div>
         <div className="flex justify-center pt-5">
-        <button onClick={handleSubmit} className="pl-0.5 pr-0.5 text-xs rounded bg-gradient-to-r from-blue-400 to-emerald-400 px-4 py-1"> LFG!!! </button>
+        <button onClick={handleWithdraw} className="pl-0.5 pr-0.5 text-xs rounded bg-gradient-to-r from-blue-400 to-emerald-400 px-4 py-1"> Withdraw </button>
         </div>
         <div className="flex justify-center pt-2">
         <button onClick={connectWallet} className="pl-0.5 pr-0.5 text-xs rounded bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-1"> {account} </button>
         </div>
-        {!contract && <p className='pt-3 text-center'>Connect Wallet to Check Lock Info 👇 </p>}
         </div>
         </div>
-        {contract && <InfoChecker state={contract} />}
-        </div>
-        
     )
 
 }
-
-export default Locker;

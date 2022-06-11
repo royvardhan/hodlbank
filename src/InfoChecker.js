@@ -8,9 +8,6 @@ export default function InfoChecker (props) {
 
     const [address, setAddress] = useState("");
     const [lockedEther, setLockedEther] = useState(null);
-    const [timeMinutes, setTimeMinutes] = useState("");
-    const [timeDays, setTimeDays] = useState("");
-    const [timeHours, setTimeHours] = useState("");
     const [time, setTime] = useState(null);
 
     const contract = new ethers.Contract(props.state.address, hodlBankAbi, props.state.signer);
@@ -27,17 +24,9 @@ export default function InfoChecker (props) {
             const getTime = new Date(query.unlockDate * 1000);
             const humanDateFormat = getTime.toLocaleString();
             setTime(humanDateFormat);
-            const timeMin = getTime.getMinutes();
-            setTimeMinutes(timeMin);
-            const timeDays = getTime.getDay();
-            setTimeDays(timeDays);
-            const timeHours = getTime.getHours();
-            setTimeHours(timeHours);
         } else {
             setLockedEther("0");
-            setTimeMinutes("0");
-            setTimeDays("0");
-            setTimeHours("0");
+            setTime("N.A");
         }
     }
 
