@@ -69,7 +69,7 @@ export default function Withdraw() {
 
     return (
         <div className="flex justify-center text-sm">
-        <div className='pt-5 pb-5 backdrop-blur-sm rounded-lg border-solid border-2 min-w-0 border-zinc-400 bg-gradient-to-r from-gray-100 to-gray-300 drop-shadow-2xl  '>
+        <div className='pt-5 pb-5 backdrop-blur-sm rounded-lg border-solid border-2 w-96 border-zinc-400 bg-gradient-to-r from-gray-100 to-gray-300 drop-shadow-2xl  '>
         <h4 className="text-center">Check Eligibility and Withdraw</h4>
         <div className="flex justify-center p-5">
             <p>Unlock:</p>
